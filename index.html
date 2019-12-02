@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Insta DP</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -48,7 +48,7 @@
 
         </form>
         <div class="row justify-content-md-center">
-            <img src="#" class="img-thumbnail img-responsive" hidden>
+                <a href="#" class="dwd" download="myprofilepic.jpg"><img src="#" class="profile img-thumbnail img-responsive" hidden></a>
             <div class="col-*">
                 <h3 id="full_name"></h3>
                 <a href="#" class="dwd btn btn-success" hidden download="myprofilepic.jpg">Download Image</a>
@@ -58,18 +58,19 @@
         </div>
         <hr>
         <div class="row follow justify-content-md-around" hidden>
-            <div class"col-md-3">
+            <div class="col-md-3">
                 <h4>Followed By</h4>
                 <h5 id="foll_by"></h5>
             </div>
-            <div class"col-md-3">
+            <div class="col-md-3">
                 <h4>Following</h4>
                 <h5 id="following"></h5>
             </div>
-            <div class"col-md-3">
+            <div class="col-md-3">
                 <h4>Posts</h4>
                 <h5 id="posts"></h5>
             </div>
+
         </div>
 
         <div class="latest-post" hidden>
@@ -86,39 +87,44 @@
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
     <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
         function getinfo() {
             // console.log("this is printed");
 
             let uname = document.getElementById("search");
-            // console.log(uname.value);
+            console.log(uname.value);
             let myurl = "https://www.instagram.com/" + encodeURIComponent(uname.value) + "/?__a=1";
 
             $.ajax({
                 url: myurl,
                 type: 'GET',
                 success: function (res) {
-                    $("img").attr('src', res['graphql']['user']['profile_pic_url']);
-                    $("img").attr('hidden', false);
-                    $('.oni').attr('href', "https://www.instagram.com/" + uname.value);
-                    $('#full_name').text(res['graphql']['user']['full_name']);
+                    console.log(res);
+                    $(".profile").attr('src', res['graphql']['user']['profile_pic_url']);
+                    $(".profile").attr('hidden', false);
+                    $('.oni').attr('href', "https://www.instagram.com/" + uname.value); $('#full_name').text(res['graphql']['user']['full_name']);
                     $('#foll_by').text(res['graphql']['user']['edge_followed_by']['count']);
                     $('#following').text(res['graphql']['user']['edge_follow']['count']);
                     $('.follow').attr('hidden', false);
                     $('.btn').attr('hidden', false);
                     $('.dwd').attr('href', res['graphql']['user']['profile_pic_url_hd']);
+                    $('#dwdimg').attr('href', res['graphql']['user']['profile_pic_url_hd']);
                     $('#posts').text(res['graphql']['user']['edge_owner_to_timeline_media']['count']);
                     let lat_post = $('.latest-post .row');
                     let i = 0;
                     while (i < 12) {
-
-                        lat_post.append("<div class='col-md-3'><a download href='" + res['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['display_url'] + "'><img                        class='img-responsive post' src='" + res['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['display_url'] + "' > </a ></div > ");
-
+                        lat_post.append("<div class='col-md-3'><a download href='" + res['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['display_url'] + "'><img class='img-responsive post' src='" + res['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['display_url'] + "'>               </a></div>");
                         i = i + 1;
                     }
                     $('.latest-post').attr('hidden', false);
+
+
+
                 }
             });
             return false;
